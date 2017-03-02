@@ -1,0 +1,28 @@
+{
+  "name": "i18node",
+  "version": "0.0.1",
+  "description": "Lightweight translation module for node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aug-riedinger/i18node.git"
+  },
+  "keywords": [
+    "i18n",
+    "internationalization",
+    "translation",
+    "translate"
+  ],
+  "author": "Augustin Riedinger",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aug-riedinger/i18node/issues"
+  },
+  "homepage": "https://github.com/aug-riedinger/i18node#readme",
+  "dependencies": {
+    "js-yaml": "^3.8.1"
+  }
+}
