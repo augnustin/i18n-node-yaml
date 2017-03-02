@@ -4,10 +4,10 @@ let fs = require('fs');
 let path = require('path');
 let yaml = require('js-yaml');
 
-module.exports = ((options) => {
+module.exports = (options) => {
   let translationFolder = options.translationFolder;
   let locales = options.locales;
-  let defaultLocale = options.defaultLocale;
+  let defaultLocale = options.defaultLocale || locales[0];
   let translations = {}; // TODO: make this immutable
   let promise = new Promise((resolveAll, rejectAll) => {
 
@@ -23,7 +23,7 @@ module.exports = ((options) => {
       translations = objects.reduce((result, object) => {
         return Object.assign(result, object);
       }, {});
-      resolveAll();
+      resolveAll(translations);
     });
   });
 
@@ -68,4 +68,4 @@ module.exports = ((options) => {
     translations: translations,
     middleware: middleware
   };
-}());
+};
