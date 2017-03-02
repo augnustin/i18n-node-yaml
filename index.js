@@ -17,6 +17,7 @@ module.exports = (options) => {
         Promise.all(files.map(file => {
           let fileName = file.replace(new RegExp(path.extname(file) + '$'), '');
           return new Promise((resolve, reject) => {
+            console.log(`${translationFolder}/${file}`);
             fs.readFile(`${translationFolder}/${file}`, 'utf8', (content) => {
               console.log(content);
               resolve({[fileName]: yaml.safeLoad(content)});
