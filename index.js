@@ -18,6 +18,7 @@ module.exports = (options) => {
           let fileName = file.replace(new RegExp(path.extname(file) + '$'), '');
           return new Promise((resolve, reject) => {
             fs.readFile(`${translationFolder}/${file}`, 'utf8', (content) => {
+              console.log(content);
               resolve({[fileName]: yaml.safeLoad(content)});
             });
           });
