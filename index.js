@@ -11,19 +11,20 @@ module.exports = (options) => {
   let translations = {}; // TODO: make this immutable
   let promise = new Promise((resolveAll, rejectAll) => {
 
-  fs.readdir(translationFolder, (err, files) => {
-    Promise.all(files.map(file => {
-      let fileName = path.extname(file);
-      return new Promise((resolve, reject) => {
-        fs.readFile(`${translationFolder}/${file}`, 'utf8', (content) => {
-          resolve({[fileName]: yaml.safeLoad(content)});
+    fs.readdir(translationFolder, (err, files) => {
+      Promise.all(files.map(file => {
+        let fileName = path.extname(file);
+        return new Promise((resolve, reject) => {
+          fs.readFile(`${translationFolder}/${file}`, 'utf8', (content) => {
+            resolve({[fileName]: yaml.safeLoad(content)});
+          });
         });
+      })).then((objects) => {
+        translations = objects.reduce((result, object) => {
+          return Object.assign(result, object);
+        }, {});
+        resolveAll(translations);
       });
-    })).then((objects) => {
-      translations = objects.reduce((result, object) => {
-        return Object.assign(result, object);
-      }, {});
-      resolveAll(translations);
     });
   });
 
