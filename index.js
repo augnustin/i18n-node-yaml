@@ -13,6 +13,7 @@ module.exports = (options) => {
   let load = () => {
     return new Promise((resolveAll, rejectAll) => {
       fs.readdir(translationFolder, (err, files) => {
+        console.log(files);
         Promise.all(files.map(file => {
           let fileName = path.extname(file);
           return new Promise((resolve, reject) => {
@@ -21,9 +22,11 @@ module.exports = (options) => {
             });
           });
         })).then((objects) => {
+          console.log(objects);
           translations = objects.reduce((result, object) => {
             return Object.assign(result, object);
           }, {});
+          console.log(translations);
           resolveAll(translations);
         });
       });
