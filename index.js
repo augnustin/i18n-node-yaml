@@ -38,26 +38,34 @@ module.exports = (options) => {
     });
   };
 
-  let translate = (translationRoot, key, locale) => {
-    console.log(translationRoot, key, locale);
-    if (typeof translationRoot === 'string') {
-      locale = key;
-      key = translationRoot;
+  let translate = (translationRoot, path, locale) => {
+    if (typeof translationRoot === 'string' || Array.isArray(translationRoot)) {
+      // no translationRoot provided
+      locale = path;
+      path = translationRoot;
       translationRoot = translations;
     }
+
+    path = Array.isArray(path) ? path : path.split('.');
     locale = locale || defaultLocale;
 
-    let keySplit = key.split('.');
-
-    let searchResult = keySplit.reduce((subTree, keyEl) => {
-      return safeObjVal(subTree, [keyEl]) || safeObjVal(subTree, [locale, keyEl]) || safeObjVal(subTree, [defaultLocale, keyEl]) || {};
-    }, translationRoot);
-
-    if (typeof searchResult === 'string') {
-      return searchResult;
+    if (typeof translationRoot === 'string' || !path[0]) {
+      return translationRoot;
+    } else if (translationRoot) {
+      translate(translationRoot[path[0]], path.splice(0, 1), locale);
     } else {
-      return safeObjVal(searchResult, [locale]) || keySplit[keySplit.length - 1];
+      return path[path.length - 1];
     }
+
+    // let searchResult = keySplit.reduce((subTree, keyEl) => {
+    //   return safeObjVal(subTree, [keyEl]) || safeObjVal(subTree, [locale, keyEl]) || safeObjVal(subTree, [defaultLocale, keyEl]) || {};
+    // }, translationRoot);
+
+    // if (typeof searchResult === 'string') {
+    //   return searchResult;
+    // } else {
+    //   return safeObjVal(searchResult, [locale]) || keySplit[keySplit.length - 1];
+    // }
   };
 
   let getLocale = () => {
