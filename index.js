@@ -39,27 +39,9 @@ module.exports = (options) => {
     }
     let keySplit = key.split('.');
 
-    return keySplit.reduce((result, keyEl) => {
-      if (typeof result !== 'object') return result;
-      let subTree = result.tree[keyEl];
-      if (subTree) {
-        if (typeof subTree === 'string') {
-          return subTree;
-        } else {
-          return {
-            tree: subTree,
-            localeFiltered: result.localeFiltered
-          }
-        }
-      } else if (!result.localeFiltered) {
-        return {
-          tree: (result.tree[locale] || result.tree[defaultLocale] || {})[keyEl],
-          localeFiltered: true
-        };
-      } else {
-        return;
-      }
-    }, {tree: translationRoot, localeFiltered: false});
+    return keySplit.reduce((subTree, keyEl) => {
+      return (subTree[keyEl] || subTree[locale][keyEl] || subTree[defaultLocale][keyEl] || {});
+    }, translationRoot);
   };
 
   let getLocale = () => {
