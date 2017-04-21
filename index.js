@@ -68,11 +68,16 @@ module.exports = (options) => {
     next();
   };
 
+  let getLocale = () => {
+    return locales[0];
+  }
+
   return {
     ready: load(),
     t: translate,
     locales: locales,
     defaultLocale: defaultLocale,
+    getLocale: getLocale,
     translations: translations,
     middleware: middleware
   };
