@@ -38,6 +38,8 @@ module.exports = (options) => {
       key = translationRoot;
       translationRoot = translations;
     }
+    locale = locale || defaultLocale;
+
     let keySplit = key.split('.');
 
     return keySplit.reduce((subTree, keyEl) => {
