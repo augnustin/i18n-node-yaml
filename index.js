@@ -49,10 +49,12 @@ module.exports = (options) => {
     path = Array.isArray(path) ? path : path.split('.');
     locale = locale || defaultLocale;
 
-    if ((typeof translationRoot === 'string') || (!path.length)) {
+    if (!path.length) {
       return translationRoot;
     } else if (translationRoot) {
-      translate(translationRoot[path[0]], path.splice(0, 1), locale);
+      let nextPath = path[0];
+      let nextRoot = safeObjVal(translationRoot, [nextPath]) || safeObjVal(translationRoot, [locale, nextPath]);
+      return translate(nextRoot, path.splice(0, 1), locale);
     } else {
       return path[path.length - 1];
     }
