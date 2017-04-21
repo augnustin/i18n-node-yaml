@@ -69,7 +69,7 @@ module.exports = (options) => {
     res.locals.t = translate;
     res.locals.locales = locales;
     res.locals.defaultLocale = defaultLocale;
-    res.getLocale = getLocale
+    res.locals.getLocale = getLocale
     next();
   };
 
