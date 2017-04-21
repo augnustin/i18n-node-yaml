@@ -39,6 +39,7 @@ module.exports = (options) => {
   };
 
   let translate = (translationRoot, key, locale) => {
+    console.log(translationRoot, key, locale);
     if (typeof translationRoot === 'string') {
       locale = key;
       key = translationRoot;
