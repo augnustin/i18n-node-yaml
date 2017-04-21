@@ -48,19 +48,12 @@ module.exports = (options) => {
     });
   };
 
-  let translate = (translationRoot, path, locale) => {
-    if (isString(translationRoot) || isArray(translationRoot)) {
-      // no translationRoot provided
-      locale = path;
-      path = translationRoot;
-      translationRoot = translations;
-    }
-
-    path = isString(path) ? path.split('.') : path;
-    locale = locale || defaultLocale;
-
+  let strictTranslate = (translationRoot, path, locale) => {
     if (!isArray(path)) {
-      raise('Path should be an array', path);
+      throw('Path should be an array');
+    }
+    if (!locale) {
+      throw('Locale not set');
     }
     if (translationRoot) {
       if (!path.length) {
@@ -68,11 +61,23 @@ module.exports = (options) => {
       } else {
         let nextPath = path[0];
         let nextRoot = safeObjVal(translationRoot, [nextPath]) || safeObjVal(translationRoot, [locale, nextPath]);
-        return translate(nextRoot, path.slice(1), locale);
+        return strictTranslate(nextRoot, path.slice(1), locale);
       }
     } else {
       return path[path.length - 1];
     }
+  };
+
+  let looseTranslate = (translationRoot, path, locale) => {
+    if (isString(translationRoot)) { // no translationRoot provided
+      locale = path;
+      path = translationRoot;
+      translationRoot = translations;
+    }
+
+    path = isString(path) ? path.split('.') : path;
+    locale = locale || defaultLocale;
+    return strictTranslate(translationRoot, path, locale);
   };
 
   let getLocale = () => {
@@ -84,7 +89,7 @@ module.exports = (options) => {
   }
 
   let middleware = (req, res, next) => {
-    res.locals.t = translate;
+    res.locals.t = looseTranslate;
     res.locals.locales = locales;
     res.locals.defaultLocale = defaultLocale;
     res.locals.getLocale = getLocale
@@ -94,7 +99,7 @@ module.exports = (options) => {
 
   return {
     ready: load(),
-    t: translate,
+    t: looseTranslate,
     locales: locales,
     defaultLocale: defaultLocale,
     getLocale: getLocale,
