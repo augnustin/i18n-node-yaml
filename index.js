@@ -15,11 +15,11 @@ let safeObjVal = (obj, keys) => {
 
 let isString = (val) => {
   return typeof val === 'string';
-}
+};
 
 let isArray = (val) => {
   return Array.isArray(val);
-}
+};
 
 module.exports = (options) => {
   let translationFolder = options.translationFolder;
@@ -62,26 +62,16 @@ module.exports = (options) => {
     if (!isArray(path)) {
       raise('Path should be an array', path);
     }
-
+    console.log('executing with', translationRoot, path, locale);
     if (!path.length) {
       return translationRoot;
     } else if (translationRoot) {
       let nextPath = path[0];
       let nextRoot = safeObjVal(translationRoot, [nextPath]) || safeObjVal(translationRoot, [locale, nextPath]);
-      return translate(nextRoot, path.splice(0, 1), locale);
+      return translate(nextRoot, path.slice(1), locale);
     } else {
       return path[path.length - 1];
     }
-
-    // let searchResult = keySplit.reduce((subTree, keyEl) => {
-    //   return safeObjVal(subTree, [keyEl]) || safeObjVal(subTree, [locale, keyEl]) || safeObjVal(subTree, [defaultLocale, keyEl]) || {};
-    // }, translationRoot);
-
-    // if (typeof searchResult === 'string') {
-    //   return searchResult;
-    // } else {
-    //   return safeObjVal(searchResult, [locale]) || keySplit[keySplit.length - 1];
-    // }
   };
 
   let getLocale = () => {
