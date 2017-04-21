@@ -35,7 +35,12 @@ module.exports = (options) => {
     });
   };
 
-  let translate = (key, locale) => {
+  let translate = (translationRoot, key, locale) => {
+    if (typeof translationRoot === 'string') {
+      locale = key;
+      key = translationRoot;
+      translationRoot = translations;
+    }
     let keySplit = key.split('.');
 
     return keySplit.reduce((result, keyEl) => {
@@ -58,7 +63,7 @@ module.exports = (options) => {
       } else {
         return;
       }
-    }, {tree: translations, localeFiltered: false});
+    }, {tree: translationRoot, localeFiltered: false});
   };
 
   let getLocale = () => {
