@@ -11,7 +11,16 @@ let safeObjVal = (obj, keys) => {
     }
     return undefined;
   }, obj);
+};
+
+let isString = (val) => {
+  return typeof val === 'string';
 }
+
+let isArray = (val) => {
+  return Array.isArray(val);
+}
+
 module.exports = (options) => {
   let translationFolder = options.translationFolder;
   let locales = options.locales;
@@ -39,15 +48,19 @@ module.exports = (options) => {
   };
 
   let translate = (translationRoot, path, locale) => {
-    if (typeof translationRoot === 'string' || Array.isArray(translationRoot)) {
+    if (isString(translationRoot) || isArray(translationRoot)) {
       // no translationRoot provided
       locale = path;
       path = translationRoot;
       translationRoot = translations;
     }
 
-    path = Array.isArray(path) ? path : path.split('.');
+    path = isString(path) ? path.split('.') : path;
     locale = locale || defaultLocale;
+
+    if (!isArray(path)) {
+      raise('Path should be an array', path);
+    }
 
     if (!path.length) {
       return translationRoot;
