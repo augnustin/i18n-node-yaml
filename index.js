@@ -49,7 +49,7 @@ module.exports = (options) => {
     path = Array.isArray(path) ? path : path.split('.');
     locale = locale || defaultLocale;
 
-    if (typeof translationRoot === 'string' || !path[0]) {
+    if ((typeof translationRoot === 'string') || (!path.length)) {
       return translationRoot;
     } else if (translationRoot) {
       translate(translationRoot[path[0]], path.splice(0, 1), locale);
