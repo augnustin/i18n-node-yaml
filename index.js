@@ -61,16 +61,17 @@ module.exports = (options) => {
     }, {tree: translations, localeFiltered: false});
   };
 
+  let getLocale = () => {
+    return locales[0];
+  };
+
   let middleware = (req, res, next) => {
     res.locals.t = translate;
     res.locals.locales = locales;
     res.locals.defaultLocale = defaultLocale;
+    res.getLocale = getLocale
     next();
   };
-
-  let getLocale = () => {
-    return locales[0];
-  }
 
   return {
     ready: load(),
