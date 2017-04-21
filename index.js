@@ -63,12 +63,14 @@ module.exports = (options) => {
       raise('Path should be an array', path);
     }
     console.log('executing with', translationRoot, path, locale);
-    if (!path.length) {
-      return translationRoot[locale] || translationRoot;
-    } else if (translationRoot) {
-      let nextPath = path[0];
-      let nextRoot = safeObjVal(translationRoot, [nextPath]) || safeObjVal(translationRoot, [locale, nextPath]);
-      return translate(nextRoot, path.slice(1), locale);
+    if (translationRoot) {
+      if (!path.length) {
+        return translationRoot[locale] || translationRoot;
+      } else {
+        let nextPath = path[0];
+        let nextRoot = safeObjVal(translationRoot, [nextPath]) || safeObjVal(translationRoot, [locale, nextPath]);
+        return translate(nextRoot, path.slice(1), locale);
+      }
     } else {
       return path[path.length - 1];
     }
