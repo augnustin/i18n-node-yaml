@@ -65,11 +65,16 @@ module.exports = (options) => {
     return locales[0];
   };
 
+  let getLocales = () => {
+    return locales;
+  }
+
   let middleware = (req, res, next) => {
     res.locals.t = translate;
     res.locals.locales = locales;
     res.locals.defaultLocale = defaultLocale;
     res.locals.getLocale = getLocale
+    res.locals.getLocales = getLocales
     next();
   };
 
@@ -79,6 +84,7 @@ module.exports = (options) => {
     locales: locales,
     defaultLocale: defaultLocale,
     getLocale: getLocale,
+    getLocales: getLocales,
     translations: translations,
     middleware: middleware
   };
