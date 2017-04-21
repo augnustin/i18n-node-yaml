@@ -62,7 +62,6 @@ module.exports = (options) => {
     if (!isArray(path)) {
       raise('Path should be an array', path);
     }
-    console.log('executing with', translationRoot, path, locale);
     if (translationRoot) {
       if (!path.length) {
         return translationRoot[locale] || translationRoot;
