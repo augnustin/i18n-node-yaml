@@ -41,6 +41,7 @@ module.exports = (options) => {
           translations = objects.reduce((result, object) => {
             return Object.assign(result, object);
           }, {});
+          console.log(translations);
           resolveAll(translations);
         });
       });
