@@ -4,6 +4,14 @@ let fs = require('fs');
 let path = require('path');
 let yaml = require('js-yaml');
 
+let safeObjVal = (obj, keys) => {
+  return keys.reduce((nestedObject, key) => {
+    if(nestedObject && key in nestedObject) {
+      return nestedObject[key];
+    }
+    return undefined;
+  }, obj);
+}
 module.exports = (options) => {
   let translationFolder = options.translationFolder;
   let locales = options.locales;
@@ -16,7 +24,6 @@ module.exports = (options) => {
         Promise.all(files.map(file => {
           let fileName = file.replace(new RegExp(path.extname(file) + '$'), '');
           return new Promise((resolve, reject) => {
-            console.log(`${translationFolder}/${file}`);
             fs.readFile(`${translationFolder}/${file}`, 'utf8', (err, content) => {
               resolve({[fileName]: yaml.safeLoad(content)});
             });
@@ -43,8 +50,8 @@ module.exports = (options) => {
     let keySplit = key.split('.');
 
     return keySplit.reduce((subTree, keyEl) => {
-      return (subTree[keyEl] || subTree[locale][keyEl] || subTree[defaultLocale][keyEl] || {});
-    }, translationRoot);
+      return safeObjVal(subTree, [keyEl]) || safeObjVal(subTree, [locale, keyEl]) || safeObjVal(subTree, [defaultLocale, keyEl]) || {};
+    }, translationRoot) || keySplit[keySplit.length - 1];
   };
 
   let getLocale = () => {
