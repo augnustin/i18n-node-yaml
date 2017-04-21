@@ -64,7 +64,7 @@ module.exports = (options) => {
     }
     console.log('executing with', translationRoot, path, locale);
     if (!path.length) {
-      return translationRoot;
+      return translationRoot[locale] || translationRoot;
     } else if (translationRoot) {
       let nextPath = path[0];
       let nextRoot = safeObjVal(translationRoot, [nextPath]) || safeObjVal(translationRoot, [locale, nextPath]);
