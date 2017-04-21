@@ -39,7 +39,6 @@ module.exports = (options) => {
   };
 
   let translate = (translationRoot, key, locale) => {
-    console.log(translationRoot, key, locale);
     if (typeof translationRoot === 'string') {
       locale = key;
       key = translationRoot;
@@ -49,9 +48,15 @@ module.exports = (options) => {
 
     let keySplit = key.split('.');
 
-    return keySplit.reduce((subTree, keyEl) => {
+    let searchResult = keySplit.reduce((subTree, keyEl) => {
       return safeObjVal(subTree, [keyEl]) || safeObjVal(subTree, [locale, keyEl]) || safeObjVal(subTree, [defaultLocale, keyEl]) || {};
-    }, translationRoot) || keySplit[keySplit.length - 1];
+    }, translationRoot);
+
+    if (typeof searchResult === 'string') {
+      return searchResult;
+    } else {
+      return safeObjVal(searchResult, [locale]) || keySplit[keySplit.length - 1];
+    }
   };
 
   let getLocale = () => {
