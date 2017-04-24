@@ -83,16 +83,12 @@ module.exports = (options) => {
   };
 
   let looseTranslate = (translationRoot, path, locale) => {
-    if (isString(translationRoot)) { // no translationRoot provided
+    if (!locale) { // no translationRoot provided
       locale = path;
       path = translationRoot;
       translationRoot = translations;
     }
-
-    path = isString(path) ? path.split('.') : path;
-    locale = locale || options.defaultLocale;
-
-    return strictTranslate(translationRoot, path, locale);
+    return strictTranslate(translationRoot, path.split('.'), locale);
   };
 
   let guessFromHeaders = req => {
@@ -132,7 +128,7 @@ module.exports = (options) => {
     setLocale(res, selectedLocale);
 
     res.locals.getLocales = getLocales
-    res.locals.t = (translationRoot, path) => looseTranslate(translationRoot, path, selectedLocale);
+    res.locals.t = (translationRoot, path, locale) => looseTranslate(translationRoot, path, locale || selectedLocale);
     res.locals.getLocale = () => selectedLocale;
     next();
   };
