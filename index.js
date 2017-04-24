@@ -25,7 +25,7 @@ let isArray = (val) => {
 
 module.exports = (options) => {
   let translations = {}; // TODO: make this immutable
-  var currentLocale;
+  let currentLocale;
 
   if (!isString(options.translationFolder)) {
     throw('Missing translationFolder');
@@ -110,11 +110,9 @@ module.exports = (options) => {
   };
 
   let setLocale = (res, locale) => {
-    currentLocale = locale;
-    res.cookie(options.cookieName, currentLocale, { maxAge: 900000, httpOnly: true });
+    res.cookie(options.cookieName, locale, { maxAge: 900000, httpOnly: true });
   };
 
-  let getLocale = () => currentLocale;
   let getLocales = () => options.locales;
   let getTranslations = () => translations;
 
@@ -131,7 +129,7 @@ module.exports = (options) => {
     setLocale(res, selectedLocale);
 
     res.locals.t = looseTranslate;
-    res.locals.getLocale = getLocale
+    res.locals.getLocale = () => selectedLocale;
     res.locals.getLocales = getLocales
     res.locals.getTranslations = getTranslations
     next();
@@ -140,7 +138,6 @@ module.exports = (options) => {
   return {
     ready: load(),
     t: looseTranslate,
-    getLocale: getLocale,
     getLocales: getLocales,
     getTranslations: translations,
     middleware: middleware
