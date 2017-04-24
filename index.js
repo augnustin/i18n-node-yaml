@@ -131,7 +131,6 @@ module.exports = (options) => {
     res.locals.t = looseTranslate;
     res.locals.getLocale = () => selectedLocale;
     res.locals.getLocales = getLocales
-    res.locals.getTranslations = getTranslations
     next();
   };
 
@@ -139,7 +138,6 @@ module.exports = (options) => {
     ready: load(),
     t: looseTranslate,
     getLocales: getLocales,
-    getTranslations: translations,
     middleware: middleware
   };
 };
