@@ -43,11 +43,11 @@ module.exports = (options) => {
 
   let load = () => {
     return new Promise((resolveAll, rejectAll) => {
-      fs.readdir(translationFolder, (err, files) => {
+      fs.readdir(options.translationFolder, (err, files) => {
         return Promise.all(files.map(file => {
           let fileName = file.replace(new RegExp(path.extname(file) + '$'), '');
           return new Promise((resolve, reject) => {
-            fs.readFile(`${translationFolder}/${file}`, 'utf8', (err, content) => {
+            fs.readFile(`${options.translationFolder}/${file}`, 'utf8', (err, content) => {
               resolve({[fileName]: yaml.safeLoad(content)});
             });
           });
