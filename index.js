@@ -133,6 +133,7 @@ module.exports = (options) => {
     res.locals.t = looseTranslate;
     res.locals.getLocale = getLocale
     res.locals.getLocales = getLocales
+    res.locals.getTranslations = getTranslations
     next();
   };
 
