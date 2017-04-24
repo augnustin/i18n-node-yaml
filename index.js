@@ -58,7 +58,7 @@ module.exports = (options) => {
           resolveAll(translations);
         });
       });
-    });
+    }).catch(err => throw('Error loading content:' err));
   };
 
   let strictTranslate = (translationRoot, path, locale) => {
