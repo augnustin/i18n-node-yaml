@@ -4,6 +4,8 @@ let fs = require('fs');
 let path = require('path');
 let yaml = require('js-yaml');
 
+// Utils
+
 let safeObjVal = (obj, keys) => {
   return keys.reduce((nestedObject, key) => {
     if(nestedObject && nestedObject.hasOwnProperty(key)) {
@@ -22,15 +24,26 @@ let isArray = (val) => {
 };
 
 module.exports = (options) => {
-  let translationFolder = options.translationFolder;
-  let locales = options.locales;
-  let defaultLocale = options.defaultLocale || locales[0];
   let translations = {}; // TODO: make this immutable
+
+  if (!isString(options.translationFolder)) {
+    throw('Missing translationFolder');
+  }
+
+  if (!isArray(options.locales)) { // TODO: guess those from files
+    throw('Missing locales');
+  }
+
+  options = Object.assign({}, options, {
+    defaultLocale: options.locales[0],
+    queryParameter: 'lang',
+    cookieName: 'i18n',
+  });
 
   let load = () => {
     return new Promise((resolveAll, rejectAll) => {
       fs.readdir(translationFolder, (err, files) => {
-        Promise.all(files.map(file => {
+        return Promise.all(files.map(file => {
           let fileName = file.replace(new RegExp(path.extname(file) + '$'), '');
           return new Promise((resolve, reject) => {
             fs.readFile(`${translationFolder}/${file}`, 'utf8', (err, content) => {
@@ -41,11 +54,10 @@ module.exports = (options) => {
           translations = objects.reduce((result, object) => {
             return Object.assign(result, object);
           }, {});
-          console.log(translations);
           resolveAll(translations);
         });
       });
-    });
+    }).then(() => setLocale(options.defaultLocale));
   };
 
   let strictTranslate = (translationRoot, path, locale) => {
@@ -76,22 +88,52 @@ module.exports = (options) => {
     }
 
     path = isString(path) ? path.split('.') : path;
-    locale = locale || defaultLocale;
+    locale = locale || options.defaultLocale;
     return strictTranslate(translationRoot, path, locale);
   };
 
+  let guessFromHeaders = req => {
+    let languageHeader = safeObjVal(req, ['headers', 'accept-language']);
+    if (languageHeader) {
+      return languageHeader.split(',').map(language => {
+        let preferenceParts = language.trim().split(';q=');
+        return {
+          locale: preferenceParts[0],
+          score: preferenceParts[1] || 1
+        };
+      }).sort((a, b) => {
+        return b.score - a.score;
+      }).map(el => el.locale);
+    }
+    return [];
+  };
+
+  let setLocale = (res, locale) => {
+    currentLocale = locale;
+    res.cookie(cookieName, currentLocale, { maxAge: 900000, httpOnly: true });
+  };
+
   let getLocale = () => {
-    return locales[0];
+    return currentLocale;
   };
 
   let getLocales = () => {
-    return locales;
-  }
+    return options.locales;
+  };
 
   let middleware = (req, res, next) => {
+    let possibleValues = [
+      safeObjVal(req, 'query', queryParameter),
+      safeObjVal(req, ['cookies', cookieName]),
+    ].concat(guessFromHeaders(req));
+
+    let selectedLocale = possibleValues.find(possibleLocale => {
+      return options.locales.find((locale) => (possibleLocale === locale));
+    }) || defaultLocale;
+
+    setLocale(res, selectedLocale);
+
     res.locals.t = looseTranslate;
-    res.locals.locales = locales;
-    res.locals.defaultLocale = defaultLocale;
     res.locals.getLocale = getLocale
     res.locals.getLocales = getLocales
     next();
@@ -100,11 +142,9 @@ module.exports = (options) => {
   return {
     ready: load(),
     t: looseTranslate,
-    locales: locales,
-    defaultLocale: defaultLocale,
     getLocale: getLocale,
     getLocales: getLocales,
-    translations: translations,
+    // translations: translations,
     middleware: middleware
   };
 };
