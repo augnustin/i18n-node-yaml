@@ -91,7 +91,6 @@ module.exports = (options) => {
     path = isString(path) ? path.split('.') : path;
     locale = locale || options.defaultLocale;
 
-    console.log('Translating', translationRoot, path, locale);
     return strictTranslate(translationRoot, path, locale);
   };
 
