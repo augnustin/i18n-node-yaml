@@ -58,7 +58,7 @@ module.exports = (options) => {
           resolveAll(translations);
         });
       });
-    }).then(() => setLocale(options.defaultLocale));
+    });
   };
 
   let strictTranslate = (translationRoot, path, locale) => {
