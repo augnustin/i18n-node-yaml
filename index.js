@@ -112,6 +112,7 @@ module.exports = (options) => {
   };
 
   let setLocale = (res, locale) => {
+    console.log('setting locale to', locale);
     res.cookie(options.cookieName, locale, { maxAge: 900000, httpOnly: true });
   };
 
