@@ -124,7 +124,7 @@ module.exports = (options) => {
 
   let middleware = (req, res, next) => {
     let possibleValues = [
-      safeObjVal(req, 'query', options.queryParameter),
+      safeObjVal(req, ['query', options.queryParameter]),
       safeObjVal(req, ['cookies', options.cookieName]),
     ].concat(guessFromHeaders(req));
 
