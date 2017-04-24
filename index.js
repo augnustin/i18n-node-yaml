@@ -62,6 +62,7 @@ module.exports = (options) => {
   };
 
   let strictTranslate = (translationRoot, path, locale) => {
+    console.log('yup', locale)
     if (!isArray(path)) {
       throw('Path should be an array');
     }
