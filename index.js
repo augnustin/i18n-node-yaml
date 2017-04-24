@@ -114,13 +114,9 @@ module.exports = (options) => {
     res.cookie(options.cookieName, currentLocale, { maxAge: 900000, httpOnly: true });
   };
 
-  let getLocale = () => {
-    return currentLocale;
-  };
-
-  let getLocales = () => {
-    return options.locales;
-  };
+  let getLocale = () => currentLocale;
+  let getLocales = () => options.locales;
+  let getTranslations = () => translations;
 
   let middleware = (req, res, next) => {
     let possibleValues = [
@@ -145,7 +141,7 @@ module.exports = (options) => {
     t: looseTranslate,
     getLocale: getLocale,
     getLocales: getLocales,
-    // translations: translations,
+    getTranslations: translations,
     middleware: middleware
   };
 };
