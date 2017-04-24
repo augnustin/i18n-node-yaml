@@ -62,13 +62,6 @@ module.exports = (options) => {
   };
 
   let strictTranslate = (translationRoot, path, locale) => {
-    console.log('yup', locale)
-    if (!isArray(path)) {
-      throw('Path should be an array');
-    }
-    if (!locale) {
-      throw('Locale not set');
-    }
     if (translationRoot) {
       if (!path.length) {
         return translationRoot[locale] || translationRoot;
@@ -107,7 +100,6 @@ module.exports = (options) => {
   };
 
   let setLocale = (res, locale) => {
-    console.log('setting locale to', locale);
     res.cookie(options.cookieName, locale, { maxAge: 900000, httpOnly: true });
   };
 
