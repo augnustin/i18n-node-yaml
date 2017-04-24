@@ -57,7 +57,7 @@ module.exports = (options) => {
           }, {});
           resolveAll(translations);
         });
-      }).catch(err => rejectAll('Error loading content:' err));
+      }).catch(err => rejectAll('Error loading content:', err));
     });
   };
 
