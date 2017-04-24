@@ -128,9 +128,9 @@ module.exports = (options) => {
 
     setLocale(res, selectedLocale);
 
-    res.locals.t = looseTranslate;
-    res.locals.getLocale = () => selectedLocale;
     res.locals.getLocales = getLocales
+    res.locals.t = (translationRoot, path) => looseTranslate(translationRoot, path, selectedLocale);
+    res.locals.getLocale = () => selectedLocale;
     next();
   };
 
