@@ -25,6 +25,7 @@ let isArray = (val) => {
 
 module.exports = (options) => {
   let translations = {}; // TODO: make this immutable
+  var currentLocale;
 
   if (!isString(options.translationFolder)) {
     throw('Missing translationFolder');
@@ -110,7 +111,7 @@ module.exports = (options) => {
 
   let setLocale = (res, locale) => {
     currentLocale = locale;
-    res.cookie(cookieName, currentLocale, { maxAge: 900000, httpOnly: true });
+    res.cookie(options.cookieName, currentLocale, { maxAge: 900000, httpOnly: true });
   };
 
   let getLocale = () => {
@@ -123,8 +124,8 @@ module.exports = (options) => {
 
   let middleware = (req, res, next) => {
     let possibleValues = [
-      safeObjVal(req, 'query', queryParameter),
-      safeObjVal(req, ['cookies', cookieName]),
+      safeObjVal(req, 'query', options.queryParameter),
+      safeObjVal(req, ['cookies', options.cookieName]),
     ].concat(guessFromHeaders(req));
 
     let selectedLocale = possibleValues.find(possibleLocale => {
