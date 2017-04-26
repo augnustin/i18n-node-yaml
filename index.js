@@ -123,7 +123,7 @@ module.exports = (options) => {
     ]).concat(guessFromHeaders(req));
 
     let selectedLocale = possibleValues.find(possibleLocale => {
-      return options.locales.find((locale) => compareLocales(possibleLocale, locale);
+      return options.locales.find((locale) => compareLocales(possibleLocale, locale));
     }) || options.defaultLocale;
 
     setLocale(res, selectedLocale);
