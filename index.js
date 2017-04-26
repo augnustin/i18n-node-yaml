@@ -130,9 +130,6 @@ module.exports = (options) => {
         .concat(guessFromHeaders(req));
 
     let selectedLocale = findBestLocale(queriedValues);
-
-    console.log('heey', queriedValues, selectedLocale);
-
     setLocale(res, selectedLocale);
 
     res.locals.getLocale = () => selectedLocale;
