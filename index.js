@@ -115,7 +115,7 @@ module.exports = (options) => {
 
     let selectedLocale = possibleValues.find(possibleLocale => {
       return options.locales.find((locale) => (possibleLocale === locale));
-    }) || defaultLocale;
+    }) || options.defaultLocale;
 
     setLocale(res, selectedLocale);
 
