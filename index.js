@@ -20,7 +20,7 @@ let isArray = (val) => {
   return Array.isArray(val);
 };
 
-let isLanguage = (localeOrLanguage) => (localeOrLanguage && (localeOrLanguage.split('_').length > 1));
+let isLanguage = (localeOrLanguage) => (localeOrLanguage && (localeOrLanguage.split('_').length === 1));
 
 let localeToLanguage = (locale) => (locale.split('_').shift());
 
@@ -126,7 +126,7 @@ module.exports = (options) => {
       return options.locales.find((locale) => compareLocales(possibleLocale, locale));
     }) || options.defaultLocale;
 
-    console.log('heey', selectedLocale);
+    console.log('heey', possibleValues, selectedLocale);
 
     setLocale(res, selectedLocale);
 
