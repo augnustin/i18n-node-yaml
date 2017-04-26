@@ -24,6 +24,8 @@ let isLanguage = (localeOrLanguage) => (localeOrLanguage && (localeOrLanguage.sp
 
 let localeToLanguage = (locale) => (locale.split('_').shift());
 
+let languageToLocale = (language, locales) => locales.find(loc => (localeToLanguage(loc) === language));
+
 let compareLocales = (localeOrLanguage, locale) => {
   if (isLanguage(localeOrLanguage)) {
     return localeOrLanguage === localeToLanguage(locale);
@@ -110,23 +112,26 @@ module.exports = (options) => {
     return [];
   };
 
+  let findBestLocale = (queriedValues) => {
+    return queriedValues.filter(val => Boolean(val)).map(queriedValue => {
+      if (isLanguage(queriedValue)) return languageToLocale(queriedValue, options.locales);
+      return queriedValue;
+    }).find(queriedLocale => options.locales.find(locale => locale === queriedLocale)) || options.defaultLocale;
+  };
+
   let setLocale = (res, locale) => {
     res.cookie(options.cookieName, locale, { maxAge: 900000, httpOnly: true });
   };
 
-  let getLocales = () => options.locales;
-  let getTranslations = () => translations;
-
   let middleware = (req, res, next) => {
-    let possibleValues = options.queryParameters.map(possibleParam => safeObjVal(req, ['query', possibleParam])).concat([
-      safeObjVal(req, ['cookies', options.cookieName]),
-    ]).concat(guessFromHeaders(req));
+    let queriedValues =
+      options.queryParameters.map(param => safeObjVal(req, ['query', param]))
+        .concat([safeObjVal(req, ['cookies', options.cookieName]),])
+        .concat(guessFromHeaders(req));
 
-    let selectedLocale = possibleValues.map(val => val.replace('-', '_')).find(possibleLocale => {
-      return options.locales.find((locale) => compareLocales(possibleLocale, locale));
-    }) || options.defaultLocale;
+    let selectedLocale = findBestLocale(queriedValues);
 
-    console.log('heey', possibleValues, selectedLocale);
+    console.log('heey', queriedValues, selectedLocale);
 
     setLocale(res, selectedLocale);
 
