@@ -20,7 +20,16 @@ let isArray = (val) => {
   return Array.isArray(val);
 };
 
+let isLanguage = (localeOrLanguage) => (localeOrLanguage && (localeOrLanguage.split('_').length > 1));
+
 let localeToLanguage = (locale) => (locale.split('_').shift());
+
+let compareLocales = (localeOrLanguage, locale) => {
+  if (isLanguage(localeOrLanguage)) {
+    return localeOrLanguage === localeToLanguage(locale);
+  }
+  return localeOrLanguage === locale;
+}
 
 module.exports = (options) => {
   let translations = {}; // TODO: make this immutable
@@ -114,7 +123,7 @@ module.exports = (options) => {
     ]).concat(guessFromHeaders(req));
 
     let selectedLocale = possibleValues.find(possibleLocale => {
-      return options.locales.find((locale) => (possibleLocale === locale));
+      return options.locales.find((locale) => compareLocales(possibleLocale, locale);
     }) || options.defaultLocale;
 
     setLocale(res, selectedLocale);
