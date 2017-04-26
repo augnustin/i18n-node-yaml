@@ -8,6 +8,7 @@ let yaml = require('js-yaml');
 
 let safeObjVal = (obj, keys) => {
   return keys.reduce((nestedObject, key) => {
+    console.log('nested', nestedObject);
     if(nestedObject && nestedObject.hasOwnProperty(key)) {
       return nestedObject[key];
     }
