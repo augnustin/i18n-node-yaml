@@ -20,6 +20,8 @@ let isArray = (val) => {
   return Array.isArray(val);
 };
 
+let localeToLanguage = (locale) => (selectedLocale.split('_').shift());
+
 module.exports = (options) => {
   let translations = {}; // TODO: make this immutable
   let currentLocale;
@@ -34,7 +36,7 @@ module.exports = (options) => {
 
   options = Object.assign({}, options, {
     defaultLocale: options.locales[0],
-    queryParameter: 'lang',
+    queryParameters: ['lang'],
     cookieName: 'i18n',
   });
 
@@ -61,10 +63,13 @@ module.exports = (options) => {
   let strictTranslate = (translationRoot, path, locale) => {
     if (translationRoot) {
       if (!path.length) {
-        return translationRoot[locale] || translationRoot;
+        return translationRoot[locale] || translationRoot[localeToLanguage(locale)] || translationRoot;
       } else {
         let nextPath = path[0];
-        let nextRoot = safeObjVal(translationRoot, [nextPath]) || safeObjVal(translationRoot, [locale, nextPath]);
+        let nextRoot =
+          safeObjVal(translationRoot, [nextPath]) ||
+          safeObjVal(translationRoot, [locale, nextPath]) ||
+          safeObjVal(translationRoot, [localeToLanguage(locale), nextPath]);
         return strictTranslate(nextRoot, path.slice(1), locale);
       }
     } else {
@@ -104,10 +109,9 @@ module.exports = (options) => {
   let getTranslations = () => translations;
 
   let middleware = (req, res, next) => {
-    let possibleValues = [
-      safeObjVal(req, ['query', options.queryParameter]),
+    let possibleValues = options.queryParameters.map(possibleParam => safeObjVal(req, ['query', possibleParam])).concat([
       safeObjVal(req, ['cookies', options.cookieName]),
-    ].concat(guessFromHeaders(req));
+    ]).concat(guessFromHeaders(req));
 
     let selectedLocale = possibleValues.find(possibleLocale => {
       return options.locales.find((locale) => (possibleLocale === locale));
@@ -115,16 +119,16 @@ module.exports = (options) => {
 
     setLocale(res, selectedLocale);
 
-    res.locals.getLocales = getLocales
-    res.locals.t = (translationRoot, path, locale) => looseTranslate(translationRoot, path, locale || selectedLocale);
     res.locals.getLocale = () => selectedLocale;
+    res.locals.getLanguage = () => localeToLanguage(selectedLocale);
+    res.locals.getLocales = () => options.locales;
+    res.locals.getLanguages = () => options.locales.map(localeToLanguage);
+    res.locals.t = (translationRoot, path, locale) => looseTranslate(translationRoot, path, locale || selectedLocale);
     next();
   };
 
   return {
     ready: load(),
-    t: looseTranslate,
-    getLocales: getLocales,
     middleware: middleware
   };
 };
