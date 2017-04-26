@@ -20,7 +20,7 @@ let isArray = (val) => {
   return Array.isArray(val);
 };
 
-let localeToLanguage = (locale) => (selectedLocale.split('_').shift());
+let localeToLanguage = (locale) => (locale.split('_').shift());
 
 module.exports = (options) => {
   let translations = {}; // TODO: make this immutable
