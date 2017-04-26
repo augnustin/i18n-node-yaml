@@ -126,6 +126,8 @@ module.exports = (options) => {
       return options.locales.find((locale) => compareLocales(possibleLocale, locale));
     }) || options.defaultLocale;
 
+    console.log('heey', selectedLocale);
+
     setLocale(res, selectedLocale);
 
     res.locals.getLocale = () => selectedLocale;
