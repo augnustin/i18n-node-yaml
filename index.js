@@ -122,7 +122,7 @@ module.exports = (options) => {
       safeObjVal(req, ['cookies', options.cookieName]),
     ]).concat(guessFromHeaders(req));
 
-    let selectedLocale = possibleValues.find(possibleLocale => {
+    let selectedLocale = possibleValues.map(val => val.replace('-', '_')).find(possibleLocale => {
       return options.locales.find((locale) => compareLocales(possibleLocale, locale));
     }) || options.defaultLocale;
 
