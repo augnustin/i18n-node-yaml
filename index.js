@@ -90,7 +90,6 @@ module.exports = (options) => {
 
   let looseTranslate = (translationRoot, path, replaceData, locale) => {
     if (isString(translationRoot)) { // no translationRoot provided
-      locale = replaceData;
       replaceData = path;
       path = translationRoot;
       translationRoot = translations;
