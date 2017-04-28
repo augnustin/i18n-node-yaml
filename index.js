@@ -95,6 +95,11 @@ module.exports = (options) => {
       path = translationRoot;
       translationRoot = translations;
     }
+    console.log({
+      path: path,
+      replaceData: replaceData,
+      locale: locale
+    });
     return strictTranslate(translationRoot, path.split('.'), replaceData, locale);
   };
 
