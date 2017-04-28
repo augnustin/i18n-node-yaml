@@ -26,12 +26,23 @@ let localeToLanguage = (locale) => (locale.split('_').shift());
 
 let languageToLocale = (language, locales) => locales.find(loc => (localeToLanguage(loc) === language));
 
+let warnResult = (result, warningString) => {
+  console.warn(warningString, result);
+  return result;
+}
+
 let compareLocales = (localeOrLanguage, locale) => {
   if (isLanguage(localeOrLanguage)) {
     return localeOrLanguage === localeToLanguage(locale);
   }
   return localeOrLanguage === locale;
-}
+};
+
+let doReplaceData = (string, replaceData) => {
+  return string.replace(/\$\{(.+)\}/g, (fullMatch, subMatch) => {
+    return replaceData[subMatch] || warnResult(subMatch, 'Missing interpolation:');
+  });
+};
 
 module.exports = (options) => {
   let translations = {}; // TODO: make this immutable
@@ -74,7 +85,7 @@ module.exports = (options) => {
   let strictTranslate = (translationRoot, path, replaceData, locale) => {
     if (translationRoot) {
       if (!path.length) {
-        return translationRoot[locale] || translationRoot[localeToLanguage(locale)] || translationRoot;
+        return doReplaceData(translationRoot[locale] || translationRoot[localeToLanguage(locale)] || translationRoot);
       } else {
         let nextPath = path[0];
         let nextRoot =
@@ -84,7 +95,7 @@ module.exports = (options) => {
         return strictTranslate(nextRoot, path.slice(1), replaceData, locale);
       }
     } else {
-      return path[path.length - 1];
+      return warnResult(path[path.length - 1], 'Wrong path to translation');
     }
   };
 
@@ -94,12 +105,7 @@ module.exports = (options) => {
       path = translationRoot;
       translationRoot = translations;
     }
-    console.log({
-      path: path,
-      replaceData: replaceData,
-      locale: locale
-    });
-    return strictTranslate(translationRoot, path.split('.'), replaceData, locale);
+    return strictTranslate(translationRoot, path.split('.'), replaceData  || {}, locale);
   };
 
   let guessFromHeaders = req => {
@@ -142,7 +148,7 @@ module.exports = (options) => {
     res.locals.getLanguage = () => localeToLanguage(selectedLocale);
     res.locals.getLocales = () => options.locales;
     res.locals.getLanguages = () => options.locales.map(localeToLanguage);
-    res.locals.t = (translationRoot, path, replaceData, locale) => looseTranslate(translationRoot, path, replaceData || {}, locale || selectedLocale);
+    res.locals.t = (translationRoot, path, replaceData, locale) => looseTranslate(translationRoot, path, replaceData, locale || selectedLocale);
     next();
   };
 
