@@ -71,7 +71,7 @@ module.exports = (options) => {
     }).catch(err => rejectAll('Error loading content:', err));
   };
 
-  let strictTranslate = (translationRoot, path, locale) => {
+  let strictTranslate = (translationRoot, path, replaceData, locale) => {
     if (translationRoot) {
       if (!path.length) {
         return translationRoot[locale] || translationRoot[localeToLanguage(locale)] || translationRoot;
@@ -81,19 +81,21 @@ module.exports = (options) => {
           safeObjVal(translationRoot, [nextPath]) ||
           safeObjVal(translationRoot, [locale, nextPath]) ||
           safeObjVal(translationRoot, [localeToLanguage(locale), nextPath]);
-        return strictTranslate(nextRoot, path.slice(1), locale);
+        return strictTranslate(nextRoot, path.slice(1), replaceData, locale);
       }
     } else {
       return path[path.length - 1];
     }
   };
 
-  let looseTranslate = (translationRoot, path, locale) => {
+  let looseTranslate = (translationRoot, path, replaceData, locale) => {
     if (isString(translationRoot)) { // no translationRoot provided
+      locale = replaceData;
+      replaceData = path;
       path = translationRoot;
       translationRoot = translations;
     }
-    return strictTranslate(translationRoot, path.split('.'), locale);
+    return strictTranslate(translationRoot, path.split('.'), replaceData, locale);
   };
 
   let guessFromHeaders = req => {
@@ -136,7 +138,7 @@ module.exports = (options) => {
     res.locals.getLanguage = () => localeToLanguage(selectedLocale);
     res.locals.getLocales = () => options.locales;
     res.locals.getLanguages = () => options.locales.map(localeToLanguage);
-    res.locals.t = (translationRoot, path, locale) => looseTranslate(translationRoot, path, locale || selectedLocale);
+    res.locals.t = (translationRoot, path, replaceData, locale) => looseTranslate(translationRoot, path, replaceData || {}, locale || selectedLocale);
     next();
   };
 
