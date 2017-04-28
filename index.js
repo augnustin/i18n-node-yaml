@@ -26,8 +26,8 @@ let localeToLanguage = (locale) => (locale.split('_').shift());
 
 let languageToLocale = (language, locales) => locales.find(loc => (localeToLanguage(loc) === language));
 
-let warnResult = (result, warningString) => {
-  console.warn(warningString, result);
+let warnResult = (result, warningString, params) => {
+  console.warn(warningString, result, params);
   return result;
 }
 
@@ -96,7 +96,7 @@ module.exports = (options) => {
         return strictTranslate(nextRoot, path.slice(1), replaceData, locale);
       }
     } else {
-      return warnResult(path[path.length - 1], 'Wrong path to translation');
+      return warnResult(path[path.length - 1], 'Wrong path to translation', path);
     }
   };
 
