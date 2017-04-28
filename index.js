@@ -85,7 +85,7 @@ module.exports = (options) => {
   let strictTranslate = (translationRoot, path, replaceData, locale) => {
     if (translationRoot) {
       if (!path.length) {
-        return doReplaceData(translationRoot[locale] || translationRoot[localeToLanguage(locale)] || translationRoot);
+        return doReplaceData(translationRoot[locale] || translationRoot[localeToLanguage(locale)] || translationRoot, replaceData);
       } else {
         let nextPath = path[0];
         let nextRoot =
