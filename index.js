@@ -150,6 +150,7 @@ module.exports = (options) => {
     res.locals.getLocales = () => options.locales;
     res.locals.getLanguages = () => options.locales.map(localeToLanguage);
     res.locals.t = (translationRoot, path, replaceData, locale) => looseTranslate(translationRoot, path, replaceData, locale || selectedLocale);
+    req.t = res.locals.t;
     next();
   };
 
