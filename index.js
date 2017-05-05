@@ -46,12 +46,12 @@ module.exports = (options) => {
     throw('Missing locales');
   }
 
-  options = Object.assign({}, options, {
+  options = Object.assign({
     debug: false,
     defaultLocale: options.locales[0],
     queryParameters: ['lang'],
     cookieName: 'i18n',
-  });
+  }, options);
 
   let warnResult = function(result, warningString) {
     let args = Array.prototype.slice.call(arguments);
