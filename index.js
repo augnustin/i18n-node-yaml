@@ -101,7 +101,10 @@ module.exports = (options) => {
         return strictTranslate(nextRoot, path.slice(1), replaceData, locale, initPath);
       }
     } else {
-      return warnResult(path[path.length - 1], 'Wrong path to translation', path, initPath);
+      let lastPath = path[path.length - 1];
+      if (lastPath) {
+        return warnResult(lastPath, 'Wrong path to translation', path, initPath);
+      }
     }
   };
 
