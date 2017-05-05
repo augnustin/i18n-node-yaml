@@ -53,8 +53,6 @@ module.exports = (options) => {
     cookieName: 'i18n',
   }, options);
 
-  console.log('Called with options', options)
-
   let warnResult = function(result, warningString) {
     let args = Array.prototype.slice.call(arguments);
     if (options.debug) {
@@ -90,7 +88,7 @@ module.exports = (options) => {
     }).catch(err => rejectAll('Error loading content:', err));
   };
 
-  let strictTranslate = (translationRoot, path, replaceData, locale) => {
+  let strictTranslate = (translationRoot, path, replaceData, locale, initPath) => {
     if (translationRoot) {
       if (!path.length) {
         return doReplaceData(translationRoot[locale] || translationRoot[localeToLanguage(locale)] || translationRoot, replaceData);
@@ -100,10 +98,10 @@ module.exports = (options) => {
           safeObjVal(translationRoot, [nextPath]) ||
           safeObjVal(translationRoot, [locale, nextPath]) ||
           safeObjVal(translationRoot, [localeToLanguage(locale), nextPath]);
-        return strictTranslate(nextRoot, path.slice(1), replaceData, locale);
+        return strictTranslate(nextRoot, path.slice(1), replaceData, locale, initPath);
       }
     } else {
-      return warnResult(path[path.length - 1], 'Wrong path to translation', path, translationRoot);
+      return warnResult(path[path.length - 1], 'Wrong path to translation', path, initPath);
     }
   };
 
@@ -113,7 +111,7 @@ module.exports = (options) => {
       path = translationRoot;
       translationRoot = translations;
     }
-    return strictTranslate(translationRoot, path.split('.'), replaceData  || {}, locale);
+    return strictTranslate(translationRoot, path.split('.'), replaceData  || {}, locale, path);
   };
 
   let guessFromHeaders = req => {
