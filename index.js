@@ -26,8 +26,8 @@ let localeToLanguage = (locale) => (locale.split('_').shift());
 
 let languageToLocale = (language, locales) => locales.find(loc => (localeToLanguage(loc) === language));
 
-let warnResult = (result, warningString, ...otherArgs) => {
-  console.warn(warningString, result, otherArgs);
+let warnResult = (result, warningString) => {
+  console.warn.apply(null, [warningString, result].concat(arguments.slice(2)));
   return result;
 }
 
