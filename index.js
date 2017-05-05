@@ -53,6 +53,8 @@ module.exports = (options) => {
     cookieName: 'i18n',
   }, options);
 
+  console.log('Called with options', options)
+
   let warnResult = function(result, warningString) {
     let args = Array.prototype.slice.call(arguments);
     if (options.debug) {
