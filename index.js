@@ -88,7 +88,7 @@ module.exports = (options) => {
     }).catch(err => rejectAll('Error loading content:', err));
   };
 
-  let strictTranslate = (translationRoot, path, replaceData, locale, initPath) => {
+  let strictTranslate = (translationRoot, path, replaceData, locale) => {
     if (translationRoot) {
       if (!path.length) {
         return doReplaceData(translationRoot[locale] || translationRoot[localeToLanguage(locale)] || translationRoot, replaceData);
@@ -98,12 +98,12 @@ module.exports = (options) => {
           safeObjVal(translationRoot, [nextPath]) ||
           safeObjVal(translationRoot, [locale, nextPath]) ||
           safeObjVal(translationRoot, [localeToLanguage(locale), nextPath]);
-        return strictTranslate(nextRoot, path.slice(1), replaceData, locale, initPath);
+        return strictTranslate(nextRoot, path.slice(1), replaceData, locale);
       }
     } else {
       let lastPath = path[path.length - 1];
       if (lastPath) {
-        return warnResult(lastPath, 'Wrong path to translation', path, initPath);
+        return warnResult(lastPath, 'Wrong path to translation', path);
       }
     }
   };
@@ -114,7 +114,7 @@ module.exports = (options) => {
       path = translationRoot;
       translationRoot = translations;
     }
-    return strictTranslate(translationRoot, path.split('.'), replaceData  || {}, locale, path);
+    return strictTranslate(translationRoot, path.split('.'), replaceData  || {}, locale);
   };
 
   let guessFromHeaders = req => {
