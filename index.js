@@ -26,11 +26,11 @@ let localeToLanguage = (locale) => (locale.split('_').shift());
 
 let languageToLocale = (language, locales) => locales.find(loc => (localeToLanguage(loc) === language));
 
-let warnResult = (result, warningString) => {
+let warnResult = function(result, warningString) {
   let args = Array.prototype.slice.call(arguments);
   console.warn.apply(null, [warningString, result].concat(args.slice(2)));
   return result;
-}
+};
 
 let compareLocales = (localeOrLanguage, locale) => {
   if (isLanguage(localeOrLanguage)) {
