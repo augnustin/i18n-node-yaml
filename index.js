@@ -26,12 +26,6 @@ let localeToLanguage = (locale) => (locale.split('_').shift());
 
 let languageToLocale = (language, locales) => locales.find(loc => (localeToLanguage(loc) === language));
 
-let warnResult = function(result, warningString) {
-  let args = Array.prototype.slice.call(arguments);
-  console.warn.apply(null, [warningString, result].concat(args.slice(2)));
-  return result;
-};
-
 let compareLocales = (localeOrLanguage, locale) => {
   if (isLanguage(localeOrLanguage)) {
     return localeOrLanguage === localeToLanguage(locale);
@@ -39,12 +33,6 @@ let compareLocales = (localeOrLanguage, locale) => {
   return localeOrLanguage === locale;
 };
 
-let doReplaceData = (string, replaceData) => {
-  if (!isString(string)) return string;
-  return string.replace(/\$\{(.+)\}/g, (fullMatch, subMatch) => {
-    return replaceData[subMatch] || warnResult(subMatch, 'Missing interpolation:');
-  });
-};
 
 module.exports = (options) => {
   let translations = {}; // TODO: make this immutable
@@ -59,10 +47,26 @@ module.exports = (options) => {
   }
 
   options = Object.assign({}, options, {
+    debug: false,
     defaultLocale: options.locales[0],
     queryParameters: ['lang'],
     cookieName: 'i18n',
   });
+
+  let warnResult = function(result, warningString) {
+    let args = Array.prototype.slice.call(arguments);
+    if (options.debug) {
+      console.warn.apply(null, [warningString, result].concat(args.slice(2)));
+    }
+    return result;
+  };
+
+  let doReplaceData = (string, replaceData) => {
+    if (!isString(string)) return string;
+    return string.replace(/\$\{(.+)\}/g, (fullMatch, subMatch) => {
+      return replaceData[subMatch] || warnResult(subMatch, 'Missing interpolation:');
+    });
+  };
 
   let load = () => {
     return new Promise((resolveAll, rejectAll) => {
