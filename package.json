@@ -1,7 +1,7 @@
 {
   "name": "i18node",
-  "version": "0.0.1",
-  "description": "Lightweight translation module for node",
+  "version": "1.0.0",
+  "description": "Lightweight translation module for node - YAML Support",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,7 +14,8 @@
     "i18n",
     "internationalization",
     "translation",
-    "translate"
+    "translate",
+    "YAML"
   ],
   "author": "Augustin Riedinger",
   "license": "MIT",
