@@ -63,7 +63,7 @@ module.exports = (options) => {
 
   let doReplaceData = (string, replaceData) => {
     if (!isString(string)) return string;
-    return string.replace(/\$\{(.+)\}/g, (fullMatch, subMatch) => {
+    return string.replace(/\$\{(.+?)\}/g, (fullMatch, subMatch) => {
       return replaceData[subMatch] || warnResult(subMatch, 'Missing interpolation:');
     });
   };
