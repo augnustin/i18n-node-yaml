@@ -176,9 +176,6 @@ html(lang=getLanguage())
 
 There are a lot of things to do. You are more than welcome to encourage and contribute to the development of this repo.
 
-Here are some steps I can immediately see:
+The most urgent one will probably be:
 
 - deal with pluralization (I haven't had the need until now)
-- write some tests
-- spread the word
-- publish to npm
