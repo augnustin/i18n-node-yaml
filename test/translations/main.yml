@@ -1,0 +1,22 @@
+hello:
+  world:
+    en: Hello World
+    fr: Bonjour le monde
+foo:
+  bar: Foo bar
+list:
+  - key: foo
+    value:
+      en: I am crazy
+      fr: Je suis fou
+  - key: bar
+    value:
+      en: I like bars
+      fr: J'aime les bars
+  - key: baz
+    value:
+      en: I'm downstairs
+      fr: Je suis en baz
+welcome:
+  en: Welcome ${name}
+  fr: Bienvenue ${name}

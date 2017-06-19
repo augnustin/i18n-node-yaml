@@ -1,0 +1,4 @@
+web:
+  image: node:argon
+  volumes:
+    - .:/tests
