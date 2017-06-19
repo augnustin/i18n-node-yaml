@@ -2,3 +2,5 @@ web:
   image: node:argon
   volumes:
     - .:/tests
+  command: npm test
+  working_dir: /tests
