@@ -5,9 +5,7 @@ i18n-node-yaml
 
 ## Motivations
 
-Yet another translation module for node?
-
-Not quite.
+Yet another translation module for node? Not quite.
 
 I created this repo for two main reasons:
 
@@ -21,7 +19,20 @@ It means a non-techie could definitely maintain his own version of a translation
 
 ### 2. Inverted translation position
 
-All translation module I have ever used manage translations with a 1 language per file logic:
+Get content organised files:
+
+```
+# translations.yml
+
+hello:
+  world:
+    en: Hello World
+    fr: Bonjour le monde
+foo:
+  bar: Foo bar
+```
+
+Instead of what all translation module I have ever used do: language organised files:
 
 ```
 # en.yml
@@ -45,18 +56,7 @@ foo:
 
 I can't find how this structure can be easily maintainable. [I already asked the question on SO](http://stackoverflow.com/questions/25664708/rails-i18n-separate-language-key-at-the-end-of-the-tree), without much success. :s
 
-Having translated myself several websites, I have always found super efficient to manage **one** file which would look like:
-
-```
-# translations.yml
-
-hello:
-  world:
-    en: Hello World
-    fr: Bonjour le monde
-foo:
-  bar: Foo bar
-```
+Having translated myself several websites, I have always found super efficient to manage **one** file.
 
 Here are the immediate advantages I get:
 - No need to duplicate if word is international/not translatable (eg. `foo.bar`)
