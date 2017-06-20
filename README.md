@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/i18n-node-yaml.svg)](https://badge.fury.io/js/i18n-node-yaml)
+
 i18n-node-yaml
 ==============
 
