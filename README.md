@@ -1,5 +1,5 @@
-i18node
-=======
+i18n-node-yaml
+==============
 
 ## Motivations
 
@@ -41,9 +41,9 @@ foo:
   bar: Foo bar
 ```
 
-I can't find how this structure can be easily maintainable. [I already asked the question on SO](http://stackoverflow.com/questions/25664708/rails-i18n-separate-language-key-at-the-end-of-the-tree), without much success.
+I can't find how this structure can be easily maintainable. [I already asked the question on SO](http://stackoverflow.com/questions/25664708/rails-i18n-separate-language-key-at-the-end-of-the-tree), without much success. :s
 
-Having translated myself several websites, I have always found super efficient to manage one file which would look like:
+Having translated myself several websites, I have always found super efficient to manage **one** file which would look like:
 
 ```
 # translations.yml
@@ -57,14 +57,14 @@ foo:
 ```
 
 Here are the immediate advantages I get:
-- No need to duplicate if translation is the same (eg. `foo.bar`)
-- No multiple file to edit if tree structure moves (and it usually does)
-- Visually obvious what translations are missing
+- No need to duplicate if word is international/not translatable (eg. `foo.bar`)
+- 1 single file to edit when tree structure moves (and it regularly does)
+- Visually obvious which translations are missing
 - Instant evaluation of the necessity to translate (eg. English `Contact` will do at first then will be translated by `Kontact` in German eventually)
 - Super easy to translate : the original source is only 1 line above! No need fancy software to do that.
 - Files are organized by content, not translations
 
-I'd be curious to hear some cons on this!
+I'd be curious to hear some cons on this, but I hardly can see any!
 
 ## Usage
 
@@ -120,7 +120,7 @@ html(lang=getLanguage())
 - `getLanguages()`: returns an array of available languages: Eg. `['en', 'fr']`
 - `t(root, path, data, locale)`:
 
-  - **`root` (type: `Object`)** : is the object to get translations from. It is optional as by default its value is the whole translations tree. But it can be useful in the case of an array of values:
+  - **`root` (type: `Object`, optional)** : is the object to get translations from. It is optional as by default its value is the whole translations tree. But it can be useful in the case of an array of values:
 
     ```
     # elements.yml
@@ -146,11 +146,11 @@ html(lang=getLanguage())
       p(data-key=t(element, 'key'))= t(element, 'value')
     ```
 
-  - **`path` (type: `string`)** : is the dot-separated succession of keys to access the value from the root. If root is not set, `path` becomes the first argument
+  - **`path` (type: `string`, required)** : is the dot-separated succession of keys to access the value from the root. If root is not set, `path` becomes the first argument
 
     You can write, back to the example above: `t('elements.list.0.value')` but you are more likely to loop over the values of the array
 
-  - **`data` (type: `object`)** : allows to make string interpolation in translations.
+  - **`data` (type: `object`, optional)** : allows to make string interpolation in translations.
 
     Eg.
 
@@ -170,12 +170,23 @@ html(lang=getLanguage())
 
     Then `t('emails.welcome', {name: 'Robert', link: 'http://example.com'})` will work as expected.
 
-  - **`locale` (type: `string`)** : most of the time you will use the selected locale in the middleware, but it is possible to override it: `t('translations.hello.world', {}, 'fr')`.
+  - **`locale` (type: `string`, optional)** : most of the time you will use the selected locale in the middleware, but it is possible to override it: `t('translations.hello.world', {}, 'fr')`.
 
 ## TODOs
 
-There are a lot of things to do. You are more than welcome to encourage and contribute to the development of this repo.
+Feel free to contribute.
 
-The most urgent one will probably be:
+The most urgent topic will probably be:
 
 - deal with pluralization (I haven't had the need until now)
+
+## Licence: MIT
+
+Copyright 2017 Augustin RIEDINGER
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
