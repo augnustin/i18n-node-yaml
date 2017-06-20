@@ -68,6 +68,14 @@ Here are the immediate advantages I get:
 
 I'd be curious to hear some cons on this, but I hardly can see any!
 
+## Install
+
+Nothing fancy:
+
+```
+npm install i18n-node-yaml --save
+```
+
 ## Usage
 
 ### Quick start
@@ -76,7 +84,7 @@ Inspired by [its grand-bother](https://github.com/mashpie/i18n-node), the syntax
 
 ```
 // app.js
-const i18n = require('i18node')({
+const i18n = require('i18n-node-yaml')({
   debug: app.get('environment') !== 'production',
   translationFolder: __dirname + '/translations',
   locales: ['en_US', 'fr_FR'],
