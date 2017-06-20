@@ -16,7 +16,11 @@ list:
   - key: baz
     value:
       en: I'm downstairs
-      fr: Je suis en baz
+      fr: Je suis en bas
+  - key: var
+    value:
+      en: I can change my ${content}
+      fr: Je peux changer mon ${content}
 welcome:
   en: Welcome ${name}
   fr: Bienvenue ${name}

@@ -33,11 +33,22 @@ describe('i18n-node-yaml tests', function() {
         let array = i18n.api('en_US').t('main.list');
         expect(i18n.api('en_US').t(array, '1.value')).to.equal('I like bars');
       });
+      it('should access array element from Array and override query language', function() {
+        let array = i18n.api('en_US').t('main.list');
+        expect(i18n.api('fr_FR').t(array, '2.value', 'en_US')).to.equal('I\'m downstairs');
+      });
       it('should interpolate', function() {
         expect(i18n.api('en_US').t('main.welcome', {name: 'George Boole'})).to.equal('Welcome George Boole');
       });
       it('should override query language', function() {
         expect(i18n.api('fr_FR').t('main.hello.world', 'en_US')).to.equal('Hello World');
+      });
+      it('should interpolate and override query language', function() {
+        expect(i18n.api('fr_FR').t('main.welcome', {name: 'George Boole'}, 'en_US')).to.equal('Welcome George Boole');
+      });
+      it('should access array element from Array, interpolate and override query language', function() {
+        let array = i18n.api('en_US').t('main.list');
+        expect(i18n.api('fr_FR').t(array, '3.value', {content: 'content'}, 'en_US')).to.equal('I can change my content');
       });
     });
     context('in French', function() {
@@ -57,11 +68,22 @@ describe('i18n-node-yaml tests', function() {
         let array = i18n.api('fr_FR').t('main.list');
         expect(i18n.api('fr_FR').t(array, '1.value')).to.equal('J\'aime les bars');
       });
+      it('should access array element from Array and override query language', function() {
+        let array = i18n.api('en_US').t('main.list');
+        expect(i18n.api('en_US').t(array, '2.value', 'fr_FR')).to.equal('Je suis en bas');
+      });
       it('should interpolate', function() {
         expect(i18n.api('fr_FR').t('main.welcome', {name: 'George Boole'})).to.equal('Bienvenue George Boole');
       });
       it('should override query language', function() {
         expect(i18n.api('en_US').t('main.hello.world', 'fr_FR')).to.equal('Bonjour le monde');
+      });
+      it('should interpolate and override query language', function() {
+        expect(i18n.api('en_US').t('main.welcome', {name: 'George Boole'}, 'fr_FR')).to.equal('Bienvenue George Boole');
+      });
+      it('should access array element from Array, interpolate and override query language', function() {
+        let array = i18n.api('en_US').t('main.list');
+        expect(i18n.api('en_US').t(array, '3.value', {content: 'contenu'}, 'fr_FR')).to.equal('Je peux changer mon contenu');
       });
     });
   });
