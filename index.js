@@ -195,9 +195,10 @@ module.exports = (options) => {
     const selectedLocale = findBestLocale(queriedValues);
     setLocale(res, selectedLocale);
 
-    Object.keys(api(selectedLocale)).forEach(key => {
-      res.locals[key] = api[key];
-      req[key] = api[key];
+    let selectedApi = api(selectedLocale);
+    Object.keys(selectedApi).forEach(key => {
+      res.locals[key] = selectedApi[key];
+      req[key] = selectedApi[key];
     });
 
     next();
