@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:aug-riedinger/i18n-node-yaml.git"
+    "url": "git@github.com:augnustin/i18n-node-yaml.git"
   },
   "keywords": [
     "i18n",
@@ -20,9 +20,9 @@
   "author": "Augustin Riedinger",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/aug-riedinger/i18n-node-yaml/issues"
+    "url": "https://github.com/augnustin/i18n-node-yaml/issues"
   },
-  "homepage": "https://github.com/aug-riedinger/i18n-node-yaml#readme",
+  "homepage": "https://github.com/augnustin/i18n-node-yaml#readme",
   "dependencies": {
     "js-yaml": "^3.8.1"
   },
