@@ -1,6 +1,6 @@
 {
   "name": "i18n-node-yaml",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Lightweight translation module for node - YAML Support",
   "main": "index.js",
   "scripts": {
