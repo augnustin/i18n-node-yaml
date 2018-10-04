@@ -122,6 +122,17 @@ html(lang=getLanguage())
     p= t('translations.hello.world')
 ```
 
+### Set the locale/language
+
+There are 4 successive ways to set/detect locale in the middleware.
+
+1. **Query parameter**: Querying `/whatever?lang=en`, modifies the locale for the current query, and updates the cookie for the next ones.
+2. **Cookie**: If absent, the middleware looks for the cookie value
+3. **Header**: If absent, it goes for the best match from the `accept-language` header.
+4. **Default locale**: If none of the above matched, then `defaultLocale` is used.
+
+The `?lang=` query parameter can be changed within the options by updating the `queryParameters` (note that this is an array, multiple values can be accepted).
+
 ### API:
 
 - `getLocale()`: returns the current locale. Eg. `'en_US'`
