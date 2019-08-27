@@ -6,6 +6,8 @@ const yaml = require('js-yaml');
 
 // Utils
 
+const notEmpty = val => val !== undefined && val !== null;
+
 const safeObjVal = (obj, keys) => {
   return keys.reduce((nestedObject, key) => {
     return nestedObject && nestedObject[key];
@@ -23,6 +25,10 @@ const isArray = (val) => {
 const isObject = (val) => {
   return (val instanceof Object) && !isArray(val);
 };
+
+const continueWhileEmpty = values => values.reduce((result, val) => {
+  return (notEmpty(result) ? result : (notEmpty(val) ? val : null));
+}, null);
 
 const isLanguage = (localeOrLanguage) => (localeOrLanguage && (localeOrLanguage.split('_').length === 1));
 
@@ -93,15 +99,20 @@ module.exports = (options) => {
   };
 
   const strictTranslate = (translationRoot, path, replaceData, locale) => {
-    if (translationRoot) {
-      if (!path.length) {
-        return doReplaceData(translationRoot[locale] || translationRoot[localeToLanguage(locale)] || translationRoot, replaceData);
+    if (notEmpty(translationRoot)) {
+      if (path.length === 0) {
+        return doReplaceData(continueWhileEmpty([
+          translationRoot[locale],
+          translationRoot[localeToLanguage(locale)],
+          translationRoot
+        ]), replaceData);
       } else {
         const nextPath = path[0];
-        const nextRoot =
-          safeObjVal(translationRoot, [nextPath]) ||
-          safeObjVal(translationRoot, [locale, nextPath]) ||
-          safeObjVal(translationRoot, [localeToLanguage(locale), nextPath]);
+        const nextRoot = continueWhileEmpty([
+          safeObjVal(translationRoot, [nextPath]),
+          safeObjVal(translationRoot, [locale, nextPath]),
+          safeObjVal(translationRoot, [localeToLanguage(locale), nextPath])
+        ]);
         return strictTranslate(nextRoot, path.slice(1), replaceData, locale);
       }
     } else {

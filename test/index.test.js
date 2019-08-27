@@ -23,6 +23,12 @@ describe('i18n-node-yaml tests', function() {
       it('should return an international word', function() {
         expect(i18n.api('en_US').t('main.foo.bar')).to.equal('Foo bar');
       });
+      it('should work with a falsey value', function() {
+        expect(i18n.api('en_US').t('main.foo.empty')).to.equal('Empty');
+      });
+      it('should work with international falsey value', function() {
+        expect(i18n.api('en_US').t('main.foo.other.empty')).to.equal('');
+      });
       it('should return an array', function() {
         expect(i18n.api('en_US').t('main.list')).to.be.an('array');
       });
@@ -57,6 +63,12 @@ describe('i18n-node-yaml tests', function() {
       });
       it('should return an international word', function() {
         expect(i18n.api('fr_FR').t('main.foo.bar')).to.equal('Foo bar');
+      });
+      it('should work with a falsey value', function() {
+        expect(i18n.api('fr_FR').t('main.foo.empty')).to.equal('');
+      });
+      it('should work with international falsey value', function() {
+        expect(i18n.api('fr_FR').t('main.foo.other.empty')).to.equal('');
       });
       it('should return an array', function() {
         expect(i18n.api('fr_FR').t('main.list')).to.be.an('array');

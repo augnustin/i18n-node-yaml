@@ -4,6 +4,11 @@ hello:
     fr: Bonjour le monde
 foo:
   bar: Foo bar
+  empty:
+    en: 'Empty'
+    fr: ''
+  other:
+    empty: ''
 list:
   - key: foo
     value:
